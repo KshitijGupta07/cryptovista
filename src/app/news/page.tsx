@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import NewsClient from './NewsClient';
 
 export default async function NewsPage() {
-  const cookieStore =  cookies();
+  const cookieStore =  await cookies();
   const user = cookieStore.get('user');
 
   if (!user) {
