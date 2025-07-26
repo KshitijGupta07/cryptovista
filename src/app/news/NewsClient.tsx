@@ -44,7 +44,7 @@ export default function NewsClient() {
   if (loading) return <p className="text-white p-6">Loading news...</p>;
   if (error) return <p className="text-red-500 p-6">{error}</p>;
 
-turn (
+return (
   <div className="min-h-screen bg-gray-900 text-white p-6">
     <h1 className="text-3xl font-bold mb-6 text-blue-400">Latest Crypto News</h1>
     <p>Articles count: {news.length}</p>
