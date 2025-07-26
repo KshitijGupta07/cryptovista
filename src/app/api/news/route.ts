@@ -14,7 +14,7 @@ export async function GET() {
     const response = await fetch(url);
 
     if (!response.ok) {
-      const errorText = await response.text(); // Log full response body
+      const errorText = await response.text();
       console.error(`❌ NewsAPI Error: ${response.status} - ${errorText}`);
       return NextResponse.json({ error: `NewsAPI error: ${response.status}` }, { status: 500 });
     }
@@ -26,7 +26,8 @@ export async function GET() {
       return NextResponse.json({ error: 'Invalid data from NewsAPI' }, { status: 500 });
     }
 
-    return NextResponse.json(data.articles);
+    // Wrap articles in an object so client can access data.articles
+    return NextResponse.json({ articles: data.articles });
   } catch (error) {
     console.error('❌ Unexpected server error:', error);
     return NextResponse.json({ error: 'Server failed while fetching news' }, { status: 500 });
