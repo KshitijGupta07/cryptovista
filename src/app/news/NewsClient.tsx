@@ -19,7 +19,7 @@ export default function NewsClient() {
     const fetchNews = async () => {
       try {
         const res = await fetch(
-          `https://newsapi.org/v2/everything?q=cryptocurrency&language=en&sortBy=publishedAt&apiKey=0c537ca02dea43f6a39dfba96894c9b7`
+          `/api/news`
 
         );
         const data = await res.json();
