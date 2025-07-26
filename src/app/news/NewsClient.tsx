@@ -18,18 +18,20 @@ export default function NewsClient() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await fetch(
-          `/api/news`
-
-        );
+        const res = await fetch(`/api/news`);
         const data = await res.json();
 
-        if (data.articles && Array.isArray(data.articles)) {
+        console.log('News API response:', data);
+
+        if (Array.isArray(data.articles)) {
           setNews(data.articles);
+        } else if (data.error) {
+          setError(`API Error: ${data.error}`);
         } else {
           setError('No news found');
         }
-      } catch {
+      } catch (err) {
+        console.error('Fetch error:', err);
         setError('Failed to fetch news');
       } finally {
         setLoading(false);
@@ -45,6 +47,9 @@ export default function NewsClient() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
       <h1 className="text-3xl font-bold mb-6 text-blue-400">Latest Crypto News</h1>
+      {news.length === 0 && (
+        <p className="text-yellow-400">No news articles found at the moment.</p>
+      )}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {news.map((article, index) => (
           <div key={index} className="bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition">
