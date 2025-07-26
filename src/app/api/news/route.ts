@@ -4,6 +4,7 @@ export async function GET() {
   const apiKey = process.env.NEWS_API_KEY;
 
   if (!apiKey) {
+    console.error('❌ Missing NEWS_API_KEY in environment');
     return NextResponse.json({ error: 'Missing NEWS_API_KEY in environment' }, { status: 500 });
   }
 
@@ -13,12 +14,21 @@ export async function GET() {
     const response = await fetch(url);
 
     if (!response.ok) {
-      return NextResponse.json({ error: 'Failed to fetch news data' }, { status: 500 });
+      const errorText = await response.text(); // Log full response body
+      console.error(`❌ NewsAPI Error: ${response.status} - ${errorText}`);
+      return NextResponse.json({ error: `NewsAPI error: ${response.status}` }, { status: 500 });
     }
 
     const data = await response.json();
+
+    if (!data.articles || !Array.isArray(data.articles)) {
+      console.error('❌ Unexpected response structure:', data);
+      return NextResponse.json({ error: 'Invalid data from NewsAPI' }, { status: 500 });
+    }
+
     return NextResponse.json(data.articles);
   } catch (error) {
-    return NextResponse.json({ error: 'Something went wrong while fetching news' }, { status: 500 });
+    console.error('❌ Unexpected server error:', error);
+    return NextResponse.json({ error: 'Server failed while fetching news' }, { status: 500 });
   }
 }
